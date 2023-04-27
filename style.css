@@ -1,0 +1,33 @@
+.button {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rebeccapurple;
+    margin-left: 6px;
+}
+
+.row-keyboard {
+    display: flex;
+}
+
+.Backspace,
+.CapsLock,
+.ShiftLeft {
+    width: 100px;
+}
+
+.Tab {
+    width: 50px;
+}
+
+.Delete {
+    width: 44px;
+}
+
+.Enter,
+.ShiftRight {
+    width: 86px;
+}
+
+.Space {
+    width: 330px;
+}
