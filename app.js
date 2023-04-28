@@ -67,6 +67,19 @@ const keyboardSymbols = {
 
 const body = document.querySelector('body');
 
+const keyboard = document.createElement('div');
+keyboard.className = 'keyboard';
+body.append(keyboard);
+
+const title = document.createElement('p');
+title.className = 'title';
+title.innerHTML = 'RSS Virtual-keyboard';
+body.append(title);
+
+const textarea = document.createElement('textarea');
+textarea.className = 'textarea';
+body.append(textarea);
+
 function createKeyboardButton() {
   const arrayOfKeyObj = Object.keys(keyboardSymbols);
   let rowKeyboard;
@@ -74,7 +87,7 @@ function createKeyboardButton() {
     if (i === 0 || i === 14 || i === 29 || i === 42 || i === 55) {
       rowKeyboard = document.createElement('div');
       rowKeyboard.className = 'row-keyboard';
-      body.append(rowKeyboard);
+      keyboard.append(rowKeyboard);
     }
     const buttonKeyboard = document.createElement('div');
     buttonKeyboard.className = `button ${arrayOfKeyObj[i]}`;
@@ -100,3 +113,53 @@ function createKeyboardButton() {
   }
 }
 createKeyboardButton();
+
+const arrayOfButton = document.querySelectorAll('.button');
+document.body.addEventListener('keydown', (e) => {
+  arrayOfButton.forEach((item) => {
+    if (item.classList.contains(`${e.code}`)) item.classList.add('active');
+  });
+  switch (e.code) {
+    case 'Backspace':
+      textarea.innerHTML = textarea.innerHTML.slice(0, textarea.innerHTML.length - 1);
+      break;
+
+    case 'Enter':
+      textarea.innerHTML += '\n';
+      break;
+
+    case 'Tab':
+      e.preventDefault();
+      textarea.innerHTML += '    ';
+      break;
+
+    case 'ArrowUp':
+      e.preventDefault();
+      textarea.innerHTML += '&#9650;';
+      break;
+
+    case 'ArrowLeft':
+      e.preventDefault();
+      textarea.innerHTML += '&#9668;';
+      break;
+
+    case 'ArrowDown':
+      e.preventDefault();
+      textarea.innerHTML += '&#9660;';
+      break;
+
+    case 'ArrowRight':
+      e.preventDefault();
+      textarea.innerHTML += '&#9658;';
+      break;
+
+    default:
+      textarea.innerHTML += e.key;
+  }
+});
+
+document.body.addEventListener('keyup', () => {
+  arrayOfButton.forEach((item) => {
+    if (item.classList.contains('active')) item.classList.remove('active');
+  });
+});

@@ -7,6 +7,8 @@
 
 .row-keyboard {
     display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .Backspace,
@@ -25,9 +27,27 @@
 
 .Enter,
 .ShiftRight {
-    width: 86px;
+    width: 90px;
 }
 
 .Space {
-    width: 330px;
+    width: 335px;
+}
+
+.keyboard {
+    width: 730px;
+    margin: 0 auto;
+    padding: 20px 20px 10px 14px;
+    border: 1px solid red;
+}
+
+.active {
+    background-color: aqua;
+}
+
+.textarea {
+    width: 700px;
+    height: 200px;
+    background-color: white;
+    border: 2px solid black;
 }
