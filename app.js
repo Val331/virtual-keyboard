@@ -6,7 +6,7 @@ const keyboardSymbols = {
   Digit4: ['4', '$', '4', ';'],
   Digit5: ['5', '%', '5', '%'],
   Digit6: ['6', '^', '6', ':'],
-  Digit7: ['7', '&', '&', '?'],
+  Digit7: ['7', '&', '7', '?'],
   Digit8: ['8', '*', '8', '*'],
   Digit9: ['9', '(', '9', '('],
   Digit0: ['0', ')', '0', ')'],
@@ -118,12 +118,13 @@ function createKeyboardButton() {
 }
 createKeyboardButton();
 
-const shift = 'en';
+let shift = 'en';
 const arrayOfEnLow = document.querySelectorAll('.en-low');
 const arrayOfEnUp = document.querySelectorAll('.en-up');
-
 const arrayOfRuLow = document.querySelectorAll('.ru-low');
 const arrayOfRuUp = document.querySelectorAll('.ru-up');
+
+const changeLang = new Set();
 
 const arrayOfButton = document.querySelectorAll('.button');
 document.body.addEventListener('keydown', (e) => {
@@ -179,6 +180,36 @@ document.body.addEventListener('keydown', (e) => {
       }
       break;
 
+    case 'AltLeft':
+      e.preventDefault();
+      changeLang.add(e.code);
+      if (changeLang.has('AltLeft') && changeLang.has('ControlLeft')) {
+        if (shift === 'en') {
+          shift = 'ru';
+          arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
+          arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
+          arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
+        } else {
+          shift = 'en';
+          arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
+          arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
+          arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
+        }
+      }
+      break;
+
+    case 'ControlLeft':
+      e.preventDefault();
+      changeLang.add(e.code);
+      if (changeLang.has('AltLeft') && changeLang.has('ControlLeft')) {
+        if (shift === 'en') {
+          shift = 'ru';
+        } else {
+          shift = 'en';
+        }
+      }
+      break;
+
     default:
       textarea.innerHTML += e.key;
   }
@@ -199,6 +230,17 @@ document.body.addEventListener('keyup', (e) => {
         arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
       }
       break;
+
+    case 'AltLeft':
+      e.preventDefault();
+      changeLang.clear();
+      break;
+
+    case 'ControlLeft':
+      e.preventDefault();
+      changeLang.clear();
+      break;
+
     default:
       textarea.innerHTML += '';
   }
