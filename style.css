@@ -1,0 +1,53 @@
+.button {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rebeccapurple;
+    margin-left: 6px;
+}
+
+.row-keyboard {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.Backspace,
+.CapsLock,
+.ShiftLeft {
+    width: 100px;
+}
+
+.Tab {
+    width: 50px;
+}
+
+.Delete {
+    width: 44px;
+}
+
+.Enter,
+.ShiftRight {
+    width: 90px;
+}
+
+.Space {
+    width: 335px;
+}
+
+.keyboard {
+    width: 730px;
+    margin: 0 auto;
+    padding: 20px 20px 10px 14px;
+    border: 1px solid red;
+}
+
+.active {
+    background-color: aqua;
+}
+
+.textarea {
+    width: 700px;
+    height: 200px;
+    background-color: white;
+    border: 2px solid black;
+}
