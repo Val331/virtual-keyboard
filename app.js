@@ -95,15 +95,19 @@ function createKeyboardButton() {
     if (Array.isArray(keyboardSymbols[arrayOfKeyObj[i]])) {
       const enLowChar = document.createElement('span');
       enLowChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][0]}`;
+      enLowChar.className = 'en-low';
       buttonKeyboard.append(enLowChar);
       const enUpChar = document.createElement('span');
       enUpChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][1]}`;
+      enUpChar.className = 'en-up hidden';
       buttonKeyboard.append(enUpChar);
       const ruLowChar = document.createElement('span');
       ruLowChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][2]}`;
+      ruLowChar.className = 'ru-low hidden';
       buttonKeyboard.append(ruLowChar);
       const ruUpChar = document.createElement('span');
       ruUpChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][3]}`;
+      ruUpChar.className = 'ru-up hidden';
       buttonKeyboard.append(ruUpChar);
     } else {
       const fixChar = document.createElement('span');
@@ -113,6 +117,13 @@ function createKeyboardButton() {
   }
 }
 createKeyboardButton();
+
+const shift = 'en';
+const arrayOfEnLow = document.querySelectorAll('.en-low');
+const arrayOfEnUp = document.querySelectorAll('.en-up');
+
+const arrayOfRuLow = document.querySelectorAll('.ru-low');
+const arrayOfRuUp = document.querySelectorAll('.ru-up');
 
 const arrayOfButton = document.querySelectorAll('.button');
 document.body.addEventListener('keydown', (e) => {
@@ -130,7 +141,7 @@ document.body.addEventListener('keydown', (e) => {
 
     case 'Tab':
       e.preventDefault();
-      textarea.innerHTML += '    ';
+      textarea.innerHTML += '&nbsp;';
       break;
 
     case 'ArrowUp':
@@ -153,13 +164,42 @@ document.body.addEventListener('keydown', (e) => {
       textarea.innerHTML += '&#9658;';
       break;
 
+    case 'Delete':
+      textarea.innerHTML += '';
+      break;
+
+    case 'ShiftLeft':
+      e.preventDefault();
+      if (shift === 'en') {
+        arrayOfEnUp.forEach((item) => item.classList.remove('hidden'));
+        arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
+      } else if (shift === 'ru') {
+        arrayOfRuUp.forEach((item) => item.classList.remove('hidden'));
+        arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
+      }
+      break;
+
     default:
       textarea.innerHTML += e.key;
   }
 });
 
-document.body.addEventListener('keyup', () => {
+document.body.addEventListener('keyup', (e) => {
   arrayOfButton.forEach((item) => {
     if (item.classList.contains('active')) item.classList.remove('active');
   });
+  switch (e.code) {
+    case 'ShiftLeft':
+      e.preventDefault();
+      if (shift === 'en') {
+        arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
+        arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
+      } else if (shift === 'ru') {
+        arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
+        arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
+      }
+      break;
+    default:
+      textarea.innerHTML += '';
+  }
 });
