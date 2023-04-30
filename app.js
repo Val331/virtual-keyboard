@@ -128,45 +128,59 @@ const changeLang = new Set();
 
 const arrayOfButton = document.querySelectorAll('.button');
 document.body.addEventListener('keydown', (e) => {
+  const listCharBtn = document.querySelector(`.${e.code}`).children;
+  let positionCaret = textarea.selectionStart;
+  let textBeforeCaret = textarea.value.slice(0, textarea.selectionStart);
+  let textAfterCaret = textarea.value.slice(textarea.selectionStart);
   arrayOfButton.forEach((item) => {
     if (item.classList.contains(`${e.code}`)) item.classList.add('active');
   });
   switch (e.code) {
     case 'Backspace':
-      textarea.innerHTML = textarea.innerHTML.slice(0, textarea.innerHTML.length - 1);
+      e.preventDefault();
+      textarea.value = `${textBeforeCaret.slice(0, textBeforeCaret.length - 1)}${textAfterCaret}`;
+      textarea.selectionStart = textarea.selectionEnd = positionCaret - 1;
       break;
 
     case 'Enter':
-      textarea.innerHTML += '\n';
+      e.preventDefault();
+      textarea.value += '\n';
       break;
 
     case 'Tab':
       e.preventDefault();
-      textarea.innerHTML += '&nbsp;';
+      textarea.value += '\t';
       break;
 
     case 'ArrowUp':
       e.preventDefault();
-      textarea.innerHTML += '&#9650;';
+      textarea.value += '&#9650;';
       break;
 
     case 'ArrowLeft':
       e.preventDefault();
-      textarea.innerHTML += '&#9668;';
+      textarea.value += '&#9668;';
       break;
 
     case 'ArrowDown':
       e.preventDefault();
-      textarea.innerHTML += '&#9660;';
+      textarea.value += '&#9660;';
       break;
 
     case 'ArrowRight':
       e.preventDefault();
-      textarea.innerHTML += '&#9658;';
+      textarea.value += '&#9658;';
       break;
 
     case 'Delete':
-      textarea.innerHTML += '';
+      e.preventDefault();
+      textarea.value = `${textBeforeCaret}${textAfterCaret.slice(1)}`;
+      textarea.selectionStart = textarea.selectionEnd = positionCaret;
+      break;
+
+    case 'Space':
+      e.preventDefault();
+      textarea.value += ' ';
       break;
 
     case 'ShiftLeft':
@@ -211,7 +225,9 @@ document.body.addEventListener('keydown', (e) => {
       break;
 
     default:
-      textarea.innerHTML += e.key;
+      for (let i = 0; i < listCharBtn.length; i += 1) {
+        if (!listCharBtn[i].classList.contains('hidden')) textarea.value += listCharBtn[i].textContent;
+      }
   }
 });
 
@@ -242,6 +258,6 @@ document.body.addEventListener('keyup', (e) => {
       break;
 
     default:
-      textarea.innerHTML += '';
+      textarea.value += '';
   }
 });
