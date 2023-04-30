@@ -119,19 +119,24 @@ function createKeyboardButton() {
 createKeyboardButton();
 
 let shift = 'en';
+let flagCaps = 'low';
+
 const arrayOfEnLow = document.querySelectorAll('.en-low');
 const arrayOfEnUp = document.querySelectorAll('.en-up');
 const arrayOfRuLow = document.querySelectorAll('.ru-low');
 const arrayOfRuUp = document.querySelectorAll('.ru-up');
+
+const arrOfLetter = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'э', 'ю', 'я', 'ь', 'ъ', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Э', 'Ю', 'Я', 'Ь', 'Ъ'];
+const arrOfspecSymb = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '{', '}', ':', '"', '<', '>', '?', '№', ';', '|', '/', ','];
 
 const changeLang = new Set();
 
 const arrayOfButton = document.querySelectorAll('.button');
 document.body.addEventListener('keydown', (e) => {
   const listCharBtn = document.querySelector(`.${e.code}`).children;
-  let positionCaret = textarea.selectionStart;
-  let textBeforeCaret = textarea.value.slice(0, textarea.selectionStart);
-  let textAfterCaret = textarea.value.slice(textarea.selectionStart);
+  const positionCaret = textarea.selectionStart;
+  const textBeforeCaret = textarea.value.slice(0, textarea.selectionStart);
+  const textAfterCaret = textarea.value.slice(textarea.selectionStart);
   arrayOfButton.forEach((item) => {
     if (item.classList.contains(`${e.code}`)) item.classList.add('active');
   });
@@ -139,7 +144,8 @@ document.body.addEventListener('keydown', (e) => {
     case 'Backspace':
       e.preventDefault();
       textarea.value = `${textBeforeCaret.slice(0, textBeforeCaret.length - 1)}${textAfterCaret}`;
-      textarea.selectionStart = textarea.selectionEnd = positionCaret - 1;
+      textarea.selectionStart = positionCaret - 1;
+      textarea.selectionEnd = positionCaret - 1;
       break;
 
     case 'Enter':
@@ -175,7 +181,8 @@ document.body.addEventListener('keydown', (e) => {
     case 'Delete':
       e.preventDefault();
       textarea.value = `${textBeforeCaret}${textAfterCaret.slice(1)}`;
-      textarea.selectionStart = textarea.selectionEnd = positionCaret;
+      textarea.selectionStart = positionCaret;
+      textarea.selectionEnd = positionCaret;
       break;
 
     case 'Space':
@@ -185,14 +192,58 @@ document.body.addEventListener('keydown', (e) => {
 
     case 'ShiftLeft':
       e.preventDefault();
-      if (shift === 'en') {
+      if (shift === 'en' && flagCaps === 'low') {
         arrayOfEnUp.forEach((item) => item.classList.remove('hidden'));
         arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
-      } else if (shift === 'ru') {
+      } else if (shift === 'ru' && flagCaps === 'low') {
         arrayOfRuUp.forEach((item) => item.classList.remove('hidden'));
         arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
+      } else if (shift === 'en' && flagCaps === 'up') {
+        arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
+        arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
+      } else if (shift === 'ru' && flagCaps === 'up') {
+        arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
+        arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
       }
       break;
+
+    case 'CapsLock':
+      e.preventDefault();
+      if (flagCaps === 'low' && shift === 'en') {
+        arrayOfEnUp.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden')
+        });
+        arrayOfEnLow.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden')
+        });
+        flagCaps = 'up';
+      } else if (flagCaps === 'low' && shift === 'ru') {
+        arrayOfRuUp.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden')
+        });
+        arrayOfRuLow.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden')
+        });
+        flagCaps = 'up';
+      } else if (flagCaps === 'up' && shift === 'en') {
+        arrayOfEnUp.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden')
+        });
+        arrayOfEnLow.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden')
+        });
+        flagCaps = 'low';
+      } else if (flagCaps === 'up' && shift === 'ru') {
+        arrayOfRuUp.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden')
+        });
+        arrayOfRuLow.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden')
+        });
+        flagCaps = 'low';
+      }
+      break;
+
 
     case 'AltLeft':
       e.preventDefault();
@@ -200,11 +251,13 @@ document.body.addEventListener('keydown', (e) => {
       if (changeLang.has('AltLeft') && changeLang.has('ControlLeft')) {
         if (shift === 'en') {
           shift = 'ru';
+          flagCaps = 'low';
           arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
           arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
           arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
         } else {
           shift = 'en';
+          flagCaps = 'low';
           arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
           arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
           arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
@@ -225,6 +278,7 @@ document.body.addEventListener('keydown', (e) => {
       break;
 
     default:
+      e.preventDefault();
       for (let i = 0; i < listCharBtn.length; i += 1) {
         if (!listCharBtn[i].classList.contains('hidden')) textarea.value += listCharBtn[i].textContent;
       }
@@ -238,12 +292,18 @@ document.body.addEventListener('keyup', (e) => {
   switch (e.code) {
     case 'ShiftLeft':
       e.preventDefault();
-      if (shift === 'en') {
+      if (shift === 'en' && flagCaps === 'low') {
         arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
         arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
-      } else if (shift === 'ru') {
+      } else if (shift === 'ru' && flagCaps === 'low') {
         arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
         arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
+      } else if (shift === 'en' && flagCaps === 'up') {
+        arrayOfEnUp.forEach((item) => item.classList.remove('hidden'));
+        arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
+      } else if (shift === 'ru' && flagCaps === 'up') {
+        arrayOfRuUp.forEach((item) => item.classList.remove('hidden'));
+        arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
       }
       break;
 
