@@ -160,22 +160,22 @@ document.body.addEventListener('keydown', (e) => {
 
     case 'ArrowUp':
       e.preventDefault();
-      textarea.value += '&#9650;';
+      textarea.value += '▲';
       break;
 
     case 'ArrowLeft':
       e.preventDefault();
-      textarea.value += '&#9668;';
+      textarea.value += '◄';
       break;
 
     case 'ArrowDown':
       e.preventDefault();
-      textarea.value += '&#9660;';
+      textarea.value += '▼';
       break;
 
     case 'ArrowRight':
       e.preventDefault();
-      textarea.value += '&#9658;';
+      textarea.value += '►';
       break;
 
     case 'Delete':
@@ -219,38 +219,67 @@ document.body.addEventListener('keydown', (e) => {
       }
       break;
 
+    case 'ShiftRight':
+      e.preventDefault();
+      if (shift === 'en' && flagCaps === 'low') {
+        arrayOfEnUp.forEach((item) => item.classList.remove('hidden'));
+        arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
+      } else if (shift === 'ru' && flagCaps === 'low') {
+        arrayOfRuUp.forEach((item) => item.classList.remove('hidden'));
+        arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
+      } else if (shift === 'en' && flagCaps === 'up') {
+        arrayOfEnLow.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+          else item.classList.add('hidden');
+        });
+        arrayOfEnUp.forEach((item) => {
+          if (arrOfspecSymb.includes(item.textContent)) item.classList.remove('hidden');
+          else item.classList.add('hidden');
+        });
+      } else if (shift === 'ru' && flagCaps === 'up') {
+        arrayOfRuLow.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+          else item.classList.add('hidden');
+        });
+        arrayOfRuUp.forEach((item) => {
+          if (arrOfspecSymb.includes(item.textContent)) item.classList.remove('hidden');
+          else item.classList.add('hidden');
+        });
+      }
+      break;
+
     case 'CapsLock':
       e.preventDefault();
       if (flagCaps === 'low' && shift === 'en') {
         arrayOfEnUp.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden')
+          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
         });
         arrayOfEnLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden')
+          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
         });
         flagCaps = 'up';
       } else if (flagCaps === 'low' && shift === 'ru') {
         arrayOfRuUp.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden')
+          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
         });
         arrayOfRuLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden')
+          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
         });
         flagCaps = 'up';
       } else if (flagCaps === 'up' && shift === 'en') {
         arrayOfEnUp.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden')
+          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
         });
         arrayOfEnLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden')
+          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
         });
         flagCaps = 'low';
       } else if (flagCaps === 'up' && shift === 'ru') {
         arrayOfRuUp.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden')
+          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
         });
         arrayOfRuLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden')
+          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
         });
         flagCaps = 'low';
       }
@@ -294,6 +323,18 @@ document.body.addEventListener('keydown', (e) => {
           arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
         }
       }
+      break;
+
+    case 'ControlRight':
+      e.preventDefault();
+      break;
+
+    case 'AltRight':
+      e.preventDefault();
+      break;
+
+    case 'MetaLeft':
+      e.preventDefault();
       break;
 
     default:
@@ -338,6 +379,35 @@ document.body.addEventListener('keyup', (e) => {
       }
       break;
 
+    case 'ShiftRight':
+      e.preventDefault();
+      if (shift === 'en' && flagCaps === 'low') {
+        arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
+        arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
+      } else if (shift === 'ru' && flagCaps === 'low') {
+        arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
+        arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
+      } else if (shift === 'en' && flagCaps === 'up') {
+        arrayOfEnLow.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+          else item.classList.remove('hidden');
+        });
+        arrayOfEnUp.forEach((item) => {
+          if (arrOfspecSymb.includes(item.textContent)) item.classList.add('hidden');
+          else item.classList.remove('hidden');
+        });
+      } else if (shift === 'ru' && flagCaps === 'up') {
+        arrayOfRuLow.forEach((item) => {
+          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+          else item.classList.remove('hidden');
+        });
+        arrayOfRuUp.forEach((item) => {
+          if (arrOfspecSymb.includes(item.textContent)) item.classList.add('hidden');
+          else item.classList.remove('hidden');
+        });
+      }
+      break;
+
     case 'AltLeft':
       e.preventDefault();
       changeLang.clear();
@@ -351,6 +421,7 @@ document.body.addEventListener('keyup', (e) => {
     case 'CapsLock':
       if (flagCaps === 'up') document.querySelector('.CapsLock').classList.add('active');
       else if (flagCaps === 'low') document.querySelector('.CapsLock').classList.remove('active');
+      break;
 
     default:
       textarea.value += '';
