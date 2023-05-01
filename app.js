@@ -80,6 +80,18 @@ const textarea = document.createElement('textarea');
 textarea.className = 'textarea';
 body.append(textarea);
 
+let shift = localStorage.getItem('lang');
+let flagCaps = 'low';
+
+if (shift === undefined) {
+  shift = 'en';
+}
+
+function setLocalStorage() {
+  localStorage.setItem('lang', shift);
+}
+window.addEventListener('beforeunload', setLocalStorage);
+
 function createKeyboardButton() {
   const arrayOfKeyObj = Object.keys(keyboardSymbols);
   let rowKeyboard;
@@ -95,7 +107,11 @@ function createKeyboardButton() {
     if (Array.isArray(keyboardSymbols[arrayOfKeyObj[i]])) {
       const enLowChar = document.createElement('span');
       enLowChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][0]}`;
-      enLowChar.className = 'en-low';
+      if (shift === 'en') {
+        enLowChar.className = 'en-low';
+      } else {
+        enLowChar.className = 'en-low hidden';
+      }
       buttonKeyboard.append(enLowChar);
       const enUpChar = document.createElement('span');
       enUpChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][1]}`;
@@ -103,7 +119,11 @@ function createKeyboardButton() {
       buttonKeyboard.append(enUpChar);
       const ruLowChar = document.createElement('span');
       ruLowChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][2]}`;
-      ruLowChar.className = 'ru-low hidden';
+      if (shift === 'ru') {
+        ruLowChar.className = 'ru-low';
+      } else {
+        ruLowChar.className = 'ru-low hidden';
+      }
       buttonKeyboard.append(ruLowChar);
       const ruUpChar = document.createElement('span');
       ruUpChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][3]}`;
@@ -117,9 +137,6 @@ function createKeyboardButton() {
   }
 }
 createKeyboardButton();
-
-let shift = 'en';
-let flagCaps = 'low';
 
 const arrayOfEnLow = document.querySelectorAll('.en-low');
 const arrayOfEnUp = document.querySelectorAll('.en-up');
