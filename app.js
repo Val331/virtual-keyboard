@@ -67,10 +67,6 @@ const keyboardSymbols = {
 
 const body = document.querySelector('body');
 
-const keyboard = document.createElement('div');
-keyboard.className = 'keyboard';
-body.append(keyboard);
-
 const title = document.createElement('p');
 title.className = 'title';
 title.innerHTML = 'RSS Virtual-keyboard';
@@ -79,6 +75,15 @@ body.append(title);
 const textarea = document.createElement('textarea');
 textarea.className = 'textarea';
 body.append(textarea);
+
+const keyboard = document.createElement('div');
+keyboard.className = 'keyboard';
+body.append(keyboard);
+
+const description = document.createElement('p');
+description.className = 'description';
+description.innerHTML = 'Для смены языка нажмите клавиши left Ctrl и left Alt <br> Клавиатура создана в операционной системе Windows';
+body.append(description);
 
 let shift = localStorage.getItem('lang');
 let flagCaps = 'low';
@@ -327,12 +332,14 @@ document.body.addEventListener('keydown', (e) => {
           arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
           arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
           arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
+          document.querySelector('.CapsLock').classList.remove('active');
         } else {
           shift = 'en';
           flagCaps = 'low';
           arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
           arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
           arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
+          document.querySelector('.CapsLock').classList.remove('active');
         }
       }
       break;
@@ -347,12 +354,14 @@ document.body.addEventListener('keydown', (e) => {
           arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
           arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
           arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
+          document.querySelector('.CapsLock').classList.remove('active');
         } else {
           shift = 'en';
           flagCaps = 'low';
           arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
           arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
           arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
+          document.querySelector('.CapsLock').classList.remove('active');
         }
       }
       break;
@@ -379,7 +388,7 @@ document.body.addEventListener('keydown', (e) => {
 
 document.body.addEventListener('keyup', (e) => {
   arrayOfButton.forEach((item) => {
-    if (item.classList.contains('active')) item.classList.remove('active');
+    if (item.classList.contains('active') && !item.classList.contains('CapsLock')) item.classList.remove('active');
   });
   switch (e.code) {
     case 'ShiftLeft':
