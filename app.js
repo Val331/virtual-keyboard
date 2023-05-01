@@ -138,6 +138,8 @@ function createKeyboardButton() {
 }
 createKeyboardButton();
 
+// click keyboard
+
 const arrayOfEnLow = document.querySelectorAll('.en-low');
 const arrayOfEnUp = document.querySelectorAll('.en-up');
 const arrayOfRuLow = document.querySelectorAll('.ru-low');
@@ -149,6 +151,99 @@ const arrOfspecSymb = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_
 const changeLang = new Set();
 
 const arrayOfButton = document.querySelectorAll('.button');
+
+function shiftKeyDown() {
+  if (shift === 'en' && flagCaps === 'low') {
+    arrayOfEnUp.forEach((item) => item.classList.remove('hidden'));
+    arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
+  } else if (shift === 'ru' && flagCaps === 'low') {
+    arrayOfRuUp.forEach((item) => item.classList.remove('hidden'));
+    arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
+  } else if (shift === 'en' && flagCaps === 'up') {
+    arrayOfEnLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+      else item.classList.add('hidden');
+    });
+    arrayOfEnUp.forEach((item) => {
+      if (arrOfspecSymb.includes(item.textContent)) item.classList.remove('hidden');
+      else item.classList.add('hidden');
+    });
+  } else if (shift === 'ru' && flagCaps === 'up') {
+    arrayOfRuLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+      else item.classList.add('hidden');
+    });
+    arrayOfRuUp.forEach((item) => {
+      if (arrOfspecSymb.includes(item.textContent)) item.classList.remove('hidden');
+      else item.classList.add('hidden');
+    });
+  }
+}
+
+function CapsLockKeudown() {
+  if (flagCaps === 'low' && shift === 'en') {
+    arrayOfEnUp.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+    });
+    arrayOfEnLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+    });
+    flagCaps = 'up';
+  } else if (flagCaps === 'low' && shift === 'ru') {
+    arrayOfRuUp.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+    });
+    arrayOfRuLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+    });
+    flagCaps = 'up';
+  } else if (flagCaps === 'up' && shift === 'en') {
+    arrayOfEnUp.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+    });
+    arrayOfEnLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+    });
+    flagCaps = 'low';
+  } else if (flagCaps === 'up' && shift === 'ru') {
+    arrayOfRuUp.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+    });
+    arrayOfRuLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+    });
+    flagCaps = 'low';
+  }
+}
+
+function shiftKeyUp() {
+  if (shift === 'en' && flagCaps === 'low') {
+    arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
+    arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
+  } else if (shift === 'ru' && flagCaps === 'low') {
+    arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
+    arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
+  } else if (shift === 'en' && flagCaps === 'up') {
+    arrayOfEnLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+      else item.classList.remove('hidden');
+    });
+    arrayOfEnUp.forEach((item) => {
+      if (arrOfspecSymb.includes(item.textContent)) item.classList.add('hidden');
+      else item.classList.remove('hidden');
+    });
+  } else if (shift === 'ru' && flagCaps === 'up') {
+    arrayOfRuLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+      else item.classList.remove('hidden');
+    });
+    arrayOfRuUp.forEach((item) => {
+      if (arrOfspecSymb.includes(item.textContent)) item.classList.add('hidden');
+      else item.classList.remove('hidden');
+    });
+  }
+}
+
 document.body.addEventListener('keydown', (e) => {
   const listCharBtn = document.querySelector(`.${e.code}`).children;
   const positionCaret = textarea.selectionStart;
@@ -209,97 +304,17 @@ document.body.addEventListener('keydown', (e) => {
 
     case 'ShiftLeft':
       e.preventDefault();
-      if (shift === 'en' && flagCaps === 'low') {
-        arrayOfEnUp.forEach((item) => item.classList.remove('hidden'));
-        arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
-      } else if (shift === 'ru' && flagCaps === 'low') {
-        arrayOfRuUp.forEach((item) => item.classList.remove('hidden'));
-        arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
-      } else if (shift === 'en' && flagCaps === 'up') {
-        arrayOfEnLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
-          else item.classList.add('hidden');
-        });
-        arrayOfEnUp.forEach((item) => {
-          if (arrOfspecSymb.includes(item.textContent)) item.classList.remove('hidden');
-          else item.classList.add('hidden');
-        });
-      } else if (shift === 'ru' && flagCaps === 'up') {
-        arrayOfRuLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
-          else item.classList.add('hidden');
-        });
-        arrayOfRuUp.forEach((item) => {
-          if (arrOfspecSymb.includes(item.textContent)) item.classList.remove('hidden');
-          else item.classList.add('hidden');
-        });
-      }
+      shiftKeyDown();
       break;
 
     case 'ShiftRight':
       e.preventDefault();
-      if (shift === 'en' && flagCaps === 'low') {
-        arrayOfEnUp.forEach((item) => item.classList.remove('hidden'));
-        arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
-      } else if (shift === 'ru' && flagCaps === 'low') {
-        arrayOfRuUp.forEach((item) => item.classList.remove('hidden'));
-        arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
-      } else if (shift === 'en' && flagCaps === 'up') {
-        arrayOfEnLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
-          else item.classList.add('hidden');
-        });
-        arrayOfEnUp.forEach((item) => {
-          if (arrOfspecSymb.includes(item.textContent)) item.classList.remove('hidden');
-          else item.classList.add('hidden');
-        });
-      } else if (shift === 'ru' && flagCaps === 'up') {
-        arrayOfRuLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
-          else item.classList.add('hidden');
-        });
-        arrayOfRuUp.forEach((item) => {
-          if (arrOfspecSymb.includes(item.textContent)) item.classList.remove('hidden');
-          else item.classList.add('hidden');
-        });
-      }
+      shiftKeyDown();
       break;
 
     case 'CapsLock':
       e.preventDefault();
-      if (flagCaps === 'low' && shift === 'en') {
-        arrayOfEnUp.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
-        });
-        arrayOfEnLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
-        });
-        flagCaps = 'up';
-      } else if (flagCaps === 'low' && shift === 'ru') {
-        arrayOfRuUp.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
-        });
-        arrayOfRuLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
-        });
-        flagCaps = 'up';
-      } else if (flagCaps === 'up' && shift === 'en') {
-        arrayOfEnUp.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
-        });
-        arrayOfEnLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
-        });
-        flagCaps = 'low';
-      } else if (flagCaps === 'up' && shift === 'ru') {
-        arrayOfRuUp.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
-        });
-        arrayOfRuLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
-        });
-        flagCaps = 'low';
-      }
+      CapsLockKeudown();
       break;
 
     case 'AltLeft':
@@ -369,60 +384,12 @@ document.body.addEventListener('keyup', (e) => {
   switch (e.code) {
     case 'ShiftLeft':
       e.preventDefault();
-      if (shift === 'en' && flagCaps === 'low') {
-        arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
-        arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
-      } else if (shift === 'ru' && flagCaps === 'low') {
-        arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
-        arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
-      } else if (shift === 'en' && flagCaps === 'up') {
-        arrayOfEnLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
-          else item.classList.remove('hidden');
-        });
-        arrayOfEnUp.forEach((item) => {
-          if (arrOfspecSymb.includes(item.textContent)) item.classList.add('hidden');
-          else item.classList.remove('hidden');
-        });
-      } else if (shift === 'ru' && flagCaps === 'up') {
-        arrayOfRuLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
-          else item.classList.remove('hidden');
-        });
-        arrayOfRuUp.forEach((item) => {
-          if (arrOfspecSymb.includes(item.textContent)) item.classList.add('hidden');
-          else item.classList.remove('hidden');
-        });
-      }
+      shiftKeyUp();
       break;
 
     case 'ShiftRight':
       e.preventDefault();
-      if (shift === 'en' && flagCaps === 'low') {
-        arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
-        arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
-      } else if (shift === 'ru' && flagCaps === 'low') {
-        arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
-        arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
-      } else if (shift === 'en' && flagCaps === 'up') {
-        arrayOfEnLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
-          else item.classList.remove('hidden');
-        });
-        arrayOfEnUp.forEach((item) => {
-          if (arrOfspecSymb.includes(item.textContent)) item.classList.add('hidden');
-          else item.classList.remove('hidden');
-        });
-      } else if (shift === 'ru' && flagCaps === 'up') {
-        arrayOfRuLow.forEach((item) => {
-          if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
-          else item.classList.remove('hidden');
-        });
-        arrayOfRuUp.forEach((item) => {
-          if (arrOfspecSymb.includes(item.textContent)) item.classList.add('hidden');
-          else item.classList.remove('hidden');
-        });
-      }
+      shiftKeyUp();
       break;
 
     case 'AltLeft':
@@ -443,4 +410,111 @@ document.body.addEventListener('keyup', (e) => {
     default:
       textarea.value += '';
   }
+});
+
+// click mouse
+
+arrayOfButton.forEach((item) => {
+  item.addEventListener('mousedown', () => {
+    const positionCaret = textarea.selectionStart;
+    const textBeforeCaret = textarea.value.slice(0, textarea.selectionStart);
+    const textAfterCaret = textarea.value.slice(textarea.selectionStart);
+    item.classList.add('active');
+    switch (item.className) {
+      case 'button Backspace active':
+        textarea.value = `${textBeforeCaret.slice(0, textBeforeCaret.length - 1)}${textAfterCaret}`;
+        textarea.selectionStart = positionCaret - 1;
+        textarea.selectionEnd = positionCaret - 1;
+        break;
+
+      case 'button Enter active':
+        textarea.value += '\n';
+        break;
+
+      case 'button Tab active':
+        textarea.value += '\t';
+        break;
+
+      case 'button ArrowUp active':
+        textarea.value += '▲';
+        break;
+
+      case 'button ArrowLeft active':
+        textarea.value += '◄';
+        break;
+
+      case 'button ArrowDown active':
+        textarea.value += '▼';
+        break;
+
+      case 'button ArrowRight active':
+        textarea.value += '►';
+        break;
+
+      case 'button Delete active':
+        textarea.value = `${textBeforeCaret}${textAfterCaret.slice(1)}`;
+        textarea.selectionStart = positionCaret;
+        textarea.selectionEnd = positionCaret;
+        break;
+
+      case 'button Space active':
+        textarea.value += ' ';
+        break;
+
+      case 'button ShiftLeft active':
+        shiftKeyDown();
+        break;
+
+      case 'button ShiftRight active':
+        shiftKeyDown();
+        break;
+
+      case 'button CapsLock active':
+        CapsLockKeudown();
+        break;
+
+      case 'button ControlRight active':
+        break;
+
+      case 'button AltRight active':
+        break;
+
+      case 'button MetaLeft active':
+        break;
+
+      case 'button ControlLeft active':
+        break;
+
+      case 'button AltLeft active':
+        break;
+
+      default:
+        for (let i = 0; i < item.children.length; i += 1) {
+          if (!item.children[i].classList.contains('hidden')) textarea.value += item.children[i].textContent;
+        }
+    }
+  });
+});
+
+arrayOfButton.forEach((item) => {
+  item.addEventListener('mouseup', () => {
+    item.classList.remove('active');
+    switch (item.className) {
+      case 'button ShiftLeft':
+        shiftKeyUp();
+        break;
+
+      case 'button ShiftRight':
+        shiftKeyUp();
+        break;
+
+      case 'button CapsLock':
+        if (flagCaps === 'up') document.querySelector('.CapsLock').classList.add('active');
+        else if (flagCaps === 'low') document.querySelector('.CapsLock').classList.remove('active');
+        break;
+
+      default:
+        textarea.value += '';
+    }
+  });
 });
