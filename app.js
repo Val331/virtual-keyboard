@@ -6,7 +6,7 @@ const keyboardSymbols = {
   Digit4: ['4', '$', '4', ';'],
   Digit5: ['5', '%', '5', '%'],
   Digit6: ['6', '^', '6', ':'],
-  Digit7: ['7', '&', '&', '?'],
+  Digit7: ['7', '&', '7', '?'],
   Digit8: ['8', '*', '8', '*'],
   Digit9: ['9', '(', '9', '('],
   Digit0: ['0', ')', '0', ')'],
@@ -67,10 +67,6 @@ const keyboardSymbols = {
 
 const body = document.querySelector('body');
 
-const keyboard = document.createElement('div');
-keyboard.className = 'keyboard';
-body.append(keyboard);
-
 const title = document.createElement('p');
 title.className = 'title';
 title.innerHTML = 'RSS Virtual-keyboard';
@@ -79,6 +75,27 @@ body.append(title);
 const textarea = document.createElement('textarea');
 textarea.className = 'textarea';
 body.append(textarea);
+
+const keyboard = document.createElement('div');
+keyboard.className = 'keyboard';
+body.append(keyboard);
+
+const description = document.createElement('p');
+description.className = 'description';
+description.innerHTML = 'Для смены языка нажмите клавиши left Ctrl и left Alt <br> Клавиатура создана в операционной системе Windows';
+body.append(description);
+
+let shift = localStorage.getItem('lang');
+let flagCaps = 'low';
+
+if (shift === undefined) {
+  shift = 'en';
+}
+
+function setLocalStorage() {
+  localStorage.setItem('lang', shift);
+}
+window.addEventListener('beforeunload', setLocalStorage);
 
 function createKeyboardButton() {
   const arrayOfKeyObj = Object.keys(keyboardSymbols);
@@ -95,15 +112,27 @@ function createKeyboardButton() {
     if (Array.isArray(keyboardSymbols[arrayOfKeyObj[i]])) {
       const enLowChar = document.createElement('span');
       enLowChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][0]}`;
+      if (shift === 'en') {
+        enLowChar.className = 'en-low';
+      } else {
+        enLowChar.className = 'en-low hidden';
+      }
       buttonKeyboard.append(enLowChar);
       const enUpChar = document.createElement('span');
       enUpChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][1]}`;
+      enUpChar.className = 'en-up hidden';
       buttonKeyboard.append(enUpChar);
       const ruLowChar = document.createElement('span');
       ruLowChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][2]}`;
+      if (shift === 'ru') {
+        ruLowChar.className = 'ru-low';
+      } else {
+        ruLowChar.className = 'ru-low hidden';
+      }
       buttonKeyboard.append(ruLowChar);
       const ruUpChar = document.createElement('span');
       ruUpChar.innerHTML = `${keyboardSymbols[arrayOfKeyObj[i]][3]}`;
+      ruUpChar.className = 'ru-up hidden';
       buttonKeyboard.append(ruUpChar);
     } else {
       const fixChar = document.createElement('span');
@@ -114,52 +143,387 @@ function createKeyboardButton() {
 }
 createKeyboardButton();
 
+// click keyboard
+
+const arrayOfEnLow = document.querySelectorAll('.en-low');
+const arrayOfEnUp = document.querySelectorAll('.en-up');
+const arrayOfRuLow = document.querySelectorAll('.ru-low');
+const arrayOfRuUp = document.querySelectorAll('.ru-up');
+
+const arrOfLetter = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'э', 'ю', 'я', 'ь', 'ъ', 'ы', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Э', 'Ю', 'Я', 'Ь', 'Ъ', 'Ы'];
+const arrOfspecSymb = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '{', '}', ':', '"', '<', '>', '?', '№', ';', '|', '/', ','];
+
+const changeLang = new Set();
+
 const arrayOfButton = document.querySelectorAll('.button');
+
+function shiftKeyDown() {
+  if (shift === 'en' && flagCaps === 'low') {
+    arrayOfEnUp.forEach((item) => item.classList.remove('hidden'));
+    arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
+  } else if (shift === 'ru' && flagCaps === 'low') {
+    arrayOfRuUp.forEach((item) => item.classList.remove('hidden'));
+    arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
+  } else if (shift === 'en' && flagCaps === 'up') {
+    arrayOfEnLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+      else item.classList.add('hidden');
+    });
+    arrayOfEnUp.forEach((item) => {
+      if (arrOfspecSymb.includes(item.textContent)) item.classList.remove('hidden');
+      else item.classList.add('hidden');
+    });
+  } else if (shift === 'ru' && flagCaps === 'up') {
+    arrayOfRuLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+      else item.classList.add('hidden');
+    });
+    arrayOfRuUp.forEach((item) => {
+      if (arrOfspecSymb.includes(item.textContent)) item.classList.remove('hidden');
+      else item.classList.add('hidden');
+    });
+  }
+}
+
+function CapsLockKeudown() {
+  if (flagCaps === 'low' && shift === 'en') {
+    arrayOfEnUp.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+    });
+    arrayOfEnLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+    });
+    flagCaps = 'up';
+  } else if (flagCaps === 'low' && shift === 'ru') {
+    arrayOfRuUp.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+    });
+    arrayOfRuLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+    });
+    flagCaps = 'up';
+  } else if (flagCaps === 'up' && shift === 'en') {
+    arrayOfEnUp.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+    });
+    arrayOfEnLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+    });
+    flagCaps = 'low';
+  } else if (flagCaps === 'up' && shift === 'ru') {
+    arrayOfRuUp.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+    });
+    arrayOfRuLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.remove('hidden');
+    });
+    flagCaps = 'low';
+  }
+}
+
+function shiftKeyUp() {
+  if (shift === 'en' && flagCaps === 'low') {
+    arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
+    arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
+  } else if (shift === 'ru' && flagCaps === 'low') {
+    arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
+    arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
+  } else if (shift === 'en' && flagCaps === 'up') {
+    arrayOfEnLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+      else item.classList.remove('hidden');
+    });
+    arrayOfEnUp.forEach((item) => {
+      if (arrOfspecSymb.includes(item.textContent)) item.classList.add('hidden');
+      else item.classList.remove('hidden');
+    });
+  } else if (shift === 'ru' && flagCaps === 'up') {
+    arrayOfRuLow.forEach((item) => {
+      if (arrOfLetter.includes(item.textContent)) item.classList.add('hidden');
+      else item.classList.remove('hidden');
+    });
+    arrayOfRuUp.forEach((item) => {
+      if (arrOfspecSymb.includes(item.textContent)) item.classList.add('hidden');
+      else item.classList.remove('hidden');
+    });
+  }
+}
+
 document.body.addEventListener('keydown', (e) => {
+  const listCharBtn = document.querySelector(`.${e.code}`).children;
+  const positionCaret = textarea.selectionStart;
+  const textBeforeCaret = textarea.value.slice(0, textarea.selectionStart);
+  const textAfterCaret = textarea.value.slice(textarea.selectionStart);
   arrayOfButton.forEach((item) => {
     if (item.classList.contains(`${e.code}`)) item.classList.add('active');
   });
   switch (e.code) {
     case 'Backspace':
-      textarea.innerHTML = textarea.innerHTML.slice(0, textarea.innerHTML.length - 1);
+      e.preventDefault();
+      textarea.value = `${textBeforeCaret.slice(0, textBeforeCaret.length - 1)}${textAfterCaret}`;
+      textarea.selectionStart = positionCaret - 1;
+      textarea.selectionEnd = positionCaret - 1;
       break;
 
     case 'Enter':
-      textarea.innerHTML += '\n';
+      e.preventDefault();
+      textarea.value += '\n';
       break;
 
     case 'Tab':
       e.preventDefault();
-      textarea.innerHTML += '    ';
+      textarea.value += '\t';
       break;
 
     case 'ArrowUp':
       e.preventDefault();
-      textarea.innerHTML += '&#9650;';
+      textarea.value += '▲';
       break;
 
     case 'ArrowLeft':
       e.preventDefault();
-      textarea.innerHTML += '&#9668;';
+      textarea.value += '◄';
       break;
 
     case 'ArrowDown':
       e.preventDefault();
-      textarea.innerHTML += '&#9660;';
+      textarea.value += '▼';
       break;
 
     case 'ArrowRight':
       e.preventDefault();
-      textarea.innerHTML += '&#9658;';
+      textarea.value += '►';
+      break;
+
+    case 'Delete':
+      e.preventDefault();
+      textarea.value = `${textBeforeCaret}${textAfterCaret.slice(1)}`;
+      textarea.selectionStart = positionCaret;
+      textarea.selectionEnd = positionCaret;
+      break;
+
+    case 'Space':
+      e.preventDefault();
+      textarea.value += ' ';
+      break;
+
+    case 'ShiftLeft':
+      e.preventDefault();
+      shiftKeyDown();
+      break;
+
+    case 'ShiftRight':
+      e.preventDefault();
+      shiftKeyDown();
+      break;
+
+    case 'CapsLock':
+      e.preventDefault();
+      CapsLockKeudown();
+      break;
+
+    case 'AltLeft':
+      e.preventDefault();
+      changeLang.add(e.code);
+      if (changeLang.has('AltLeft') && changeLang.has('ControlLeft')) {
+        if (shift === 'en') {
+          shift = 'ru';
+          flagCaps = 'low';
+          arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
+          arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
+          arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
+          document.querySelector('.CapsLock').classList.remove('active');
+        } else {
+          shift = 'en';
+          flagCaps = 'low';
+          arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
+          arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
+          arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
+          document.querySelector('.CapsLock').classList.remove('active');
+        }
+      }
+      break;
+
+    case 'ControlLeft':
+      e.preventDefault();
+      changeLang.add(e.code);
+      if (changeLang.has('AltLeft') && changeLang.has('ControlLeft')) {
+        if (shift === 'en') {
+          shift = 'ru';
+          flagCaps = 'low';
+          arrayOfEnUp.forEach((item) => item.classList.add('hidden'));
+          arrayOfEnLow.forEach((item) => item.classList.add('hidden'));
+          arrayOfRuLow.forEach((item) => item.classList.remove('hidden'));
+          document.querySelector('.CapsLock').classList.remove('active');
+        } else {
+          shift = 'en';
+          flagCaps = 'low';
+          arrayOfRuLow.forEach((item) => item.classList.add('hidden'));
+          arrayOfRuUp.forEach((item) => item.classList.add('hidden'));
+          arrayOfEnLow.forEach((item) => item.classList.remove('hidden'));
+          document.querySelector('.CapsLock').classList.remove('active');
+        }
+      }
+      break;
+
+    case 'ControlRight':
+      e.preventDefault();
+      break;
+
+    case 'AltRight':
+      e.preventDefault();
+      break;
+
+    case 'MetaLeft':
+      e.preventDefault();
       break;
 
     default:
-      textarea.innerHTML += e.key;
+      e.preventDefault();
+      for (let i = 0; i < listCharBtn.length; i += 1) {
+        if (!listCharBtn[i].classList.contains('hidden')) textarea.value += listCharBtn[i].textContent;
+      }
   }
 });
 
-document.body.addEventListener('keyup', () => {
+document.body.addEventListener('keyup', (e) => {
   arrayOfButton.forEach((item) => {
-    if (item.classList.contains('active')) item.classList.remove('active');
+    if (item.classList.contains('active') && !item.classList.contains('CapsLock')) item.classList.remove('active');
+  });
+  switch (e.code) {
+    case 'ShiftLeft':
+      e.preventDefault();
+      shiftKeyUp();
+      break;
+
+    case 'ShiftRight':
+      e.preventDefault();
+      shiftKeyUp();
+      break;
+
+    case 'AltLeft':
+      e.preventDefault();
+      changeLang.clear();
+      break;
+
+    case 'ControlLeft':
+      e.preventDefault();
+      changeLang.clear();
+      break;
+
+    case 'CapsLock':
+      if (flagCaps === 'up') document.querySelector('.CapsLock').classList.add('active');
+      else if (flagCaps === 'low') document.querySelector('.CapsLock').classList.remove('active');
+      break;
+
+    default:
+      textarea.value += '';
+  }
+});
+
+// click mouse
+
+arrayOfButton.forEach((item) => {
+  item.addEventListener('mousedown', () => {
+    const positionCaret = textarea.selectionStart;
+    const textBeforeCaret = textarea.value.slice(0, textarea.selectionStart);
+    const textAfterCaret = textarea.value.slice(textarea.selectionStart);
+    item.classList.add('active');
+    switch (item.className) {
+      case 'button Backspace active':
+        textarea.value = `${textBeforeCaret.slice(0, textBeforeCaret.length - 1)}${textAfterCaret}`;
+        textarea.selectionStart = positionCaret - 1;
+        textarea.selectionEnd = positionCaret - 1;
+        break;
+
+      case 'button Enter active':
+        textarea.value += '\n';
+        break;
+
+      case 'button Tab active':
+        textarea.value += '\t';
+        break;
+
+      case 'button ArrowUp active':
+        textarea.value += '▲';
+        break;
+
+      case 'button ArrowLeft active':
+        textarea.value += '◄';
+        break;
+
+      case 'button ArrowDown active':
+        textarea.value += '▼';
+        break;
+
+      case 'button ArrowRight active':
+        textarea.value += '►';
+        break;
+
+      case 'button Delete active':
+        textarea.value = `${textBeforeCaret}${textAfterCaret.slice(1)}`;
+        textarea.selectionStart = positionCaret;
+        textarea.selectionEnd = positionCaret;
+        break;
+
+      case 'button Space active':
+        textarea.value += ' ';
+        break;
+
+      case 'button ShiftLeft active':
+        shiftKeyDown();
+        break;
+
+      case 'button ShiftRight active':
+        shiftKeyDown();
+        break;
+
+      case 'button CapsLock active':
+        CapsLockKeudown();
+        break;
+
+      case 'button ControlRight active':
+        break;
+
+      case 'button AltRight active':
+        break;
+
+      case 'button MetaLeft active':
+        break;
+
+      case 'button ControlLeft active':
+        break;
+
+      case 'button AltLeft active':
+        break;
+
+      default:
+        for (let i = 0; i < item.children.length; i += 1) {
+          if (!item.children[i].classList.contains('hidden')) textarea.value += item.children[i].textContent;
+        }
+    }
+  });
+});
+
+arrayOfButton.forEach((item) => {
+  item.addEventListener('mouseup', () => {
+    item.classList.remove('active');
+    switch (item.className) {
+      case 'button ShiftLeft':
+        shiftKeyUp();
+        break;
+
+      case 'button ShiftRight':
+        shiftKeyUp();
+        break;
+
+      case 'button CapsLock':
+        if (flagCaps === 'up') document.querySelector('.CapsLock').classList.add('active');
+        else if (flagCaps === 'low') document.querySelector('.CapsLock').classList.remove('active');
+        break;
+
+      default:
+        textarea.value += '';
+    }
   });
 });
