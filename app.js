@@ -88,7 +88,7 @@ body.append(description);
 let shift = localStorage.getItem('lang');
 let flagCaps = 'low';
 
-if (shift === undefined) {
+if (shift === 'null') {
   shift = 'en';
 }
 
